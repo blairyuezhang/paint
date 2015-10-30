@@ -10,12 +10,18 @@ var saveButton;
 var brushPicker;
 var brushType;
 
-var pumpkin;
+var pumpkin1;
+var unicorn1;
+var bear1;
+var polkaDot;
+
 
 
 
 function preload(){
-    pumpkin = loadImage("images/pumpkin.png");
+    pumpkin1 = loadImage("images/pumpkin.png");
+    unicorn1 = loadImage("images/unicorn.png");
+    bear1 = loadImage("images/bear.png")
     imageMode(CENTER);
 }
 
@@ -38,12 +44,21 @@ function setup() {
     saveButton = select('.saveButton');
     saveButton.mouseClicked(saveFunction);
 
+    //set up the clear button
+    clearButton = select('.clearButton');
+    clearButton.mouseClicked(clearFunction);
+
     //set up the brush type
     brushPicker = createSelect();
     brushPicker.parent("brushType")
     brushPicker.option('paint brush');
     brushPicker.option('spray can');
-    brushPicker.option('image');
+    brushPicker.option('polka dot')
+    brushPicker.option('pumpkin');
+    brushPicker.option('unicorn');
+    brushPicker.option('bear');
+    brushPicker.option('paint bucket');
+    brushPicker.option('eraser');
     brushPicker.changed(changeBrush);
     brushType = brushPicker.value();
 }
@@ -55,8 +70,18 @@ function draw() {
             sprayCan();
         } else if(brushType == "paint brush"){
             standardStroke(); 
-        } else if(brushType == "image"){
-            drawImage(); 
+        } else if(brushType == "pumpkin"){
+            drawPumpkin(); 
+        } else if(brushType == "unicorn"){
+            drawUnicorn();
+        } else if(brushType == "bear"){
+            drawBear();
+        } else if(brushType == "polka dot"){
+            polkaDot();
+        }else if(brushType == "eraser"){
+            erase();
+        }else if(brushType == "paint bucket"){
+            paintbucket();
         }
         
     } else {
@@ -102,11 +127,44 @@ function sprayCan(){
     }    
 }
 
-function drawImage(){
-    //draw the image where the mouse is and set the size to the brush size
-    image(pumpkin,mouseX,mouseY, slider.value(), slider.value());
+function polkaDot(){
+    var sliderVal = slider.value();
+    stroke( "#"+colorPicker.value() );
+    fill( "#"+colorPicker.value() );
+
+    for (var x = 0; x< sliderVal; x+=4){
+        for (var y = 0; y < sliderVal; y+=4){
+            ellipse(mouseX+5, mouseY+5, x+10, y+10);
+        }
+    }
 }
 
+function drawPumpkin(){
+    //draw the image where the mouse is and set the size to the brush size
+    image(pumpkin1,mouseX,mouseY, slider.value(), slider.value());
+}
+
+function drawUnicorn(){
+    //draw the image where the mouse is and set the size to the brush size
+    image(unicorn1,mouseX,mouseY, slider.value(), slider.value());
+}
+
+function drawBear(){
+    image(bear1,mouseX,mouseY, slider.value(), slider.value());
+}
+
+function erase(){
+    strokeWeight(slider.value());
+
+    stroke("white");
+    
+    line(pmouseX, pmouseY, mouseX, mouseY);
+
+}
+
+function paintbucket(){
+    background("#"+colorPicker.value());
+}
 //--------------------------
 // Event Listeners
 //--------------------------
@@ -119,3 +177,25 @@ function changeBrush(){
 function saveFunction() {
     save(drawingCanvas, "myDrawing.jpg");
 }
+
+
+function clearFunction() {
+    clear();
+    background("white");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
